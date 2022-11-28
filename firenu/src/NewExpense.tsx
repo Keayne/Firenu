@@ -1,11 +1,16 @@
+import { ExpenseData } from "./App";
 import { ExpenseForm } from "./ExpenseForm";
 
-export function NewExpense() {
+type NewExpenseProps = {
+  onSubmit: (data: ExpenseData) => void;
+};
+
+export function NewExpense({ onSubmit }: NewExpenseProps) {
   //New note
   return (
     <>
       <h1 className="mb-4">New expense component</h1>
-      <ExpenseForm />
+      <ExpenseForm onSubmit={onSubmit} />
     </>
   );
 }
