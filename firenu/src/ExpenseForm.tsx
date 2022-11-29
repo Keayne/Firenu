@@ -21,7 +21,7 @@ export function ExpenseForm({ onSubmit }: ExpenseFormProps) {
       title: titleRef.current!.value,
       markdown: markdownRef.current!.value,
       tags: [],
-      //cost: costRef.current!.value,
+      cost: costRef.current!.value,
     });
   }
   return (

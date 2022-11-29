@@ -9,7 +9,7 @@ export function NewExpense({ onSubmit }: NewExpenseProps) {
   //New note
   return (
     <>
-      <h1 className="mb-4">New expense component</h1>
+      <h1 className="mb-4">Create a new expense</h1>
       <ExpenseForm onSubmit={onSubmit} />
     </>
   );

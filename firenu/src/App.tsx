@@ -10,6 +10,7 @@ export type ExpenseData = {
   title: string;
   markdown: string;
   tags: Tag[];
+  //cost: string;
 };
 
 export type Tag = {
@@ -29,11 +30,13 @@ export type RawExpenseData = {
   title: string;
   markdown: string;
   tagIds: string[];
+  //cost: string;
 };
 
 function App() {
   const [expenses, setExpenses] = useLocalStorage<RawExpense[]>("EXPENSES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
+  //const [costs, setCosts] = useLocalStorage
   //TODO: add handling for costs
 
   const expensesWithTags = useMemo(() => {
