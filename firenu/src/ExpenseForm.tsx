@@ -17,8 +17,10 @@ export function ExpenseForm({
   availableTags,
 }: ExpenseFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
+  const costRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
-  const costRef = useRef<HTMLTextAreaElement>(null);
+  const oneTimePayment = useRef<HTMLFormElement>(null);
+  const paid = useRef<HTMLInputElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const navigate = useNavigate();
 
@@ -27,12 +29,14 @@ export function ExpenseForm({
     onSubmit({
       //values can't be null as required from form
       title: titleRef.current!.value,
+      cost: costRef.current!.value,
       markdown: markdownRef.current!.value,
       tags: selectedTags,
-      //cost: costRef.current!.value,
+      oneTimePayment: false, //TODO fix ref 3726
+      paid: false, //TODO fix ref
     });
 
-    navigate("..");
+    //navigate(".."); navigate back to previous page after submit, disabled for testing
   }
   return (
     <Form onSubmit={handleSubmit}>
@@ -72,7 +76,7 @@ export function ExpenseForm({
           </Col>
           <Form.Group controlId="cost">
             <Form.Label>Cost</Form.Label>
-            <Form.Control required />
+            <Form.Control ref={costRef} required />
           </Form.Group>
           <Form.Group>
             <Form.Check

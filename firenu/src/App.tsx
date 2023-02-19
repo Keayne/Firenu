@@ -5,12 +5,15 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { NewExpense } from "./NewExpense";
 import { useLocalStorage } from "./useLocalStorage";
 import { v4 as uuidV4 } from "uuid";
+import { ExpenseList } from "./ExpenseList";
 
 export type ExpenseData = {
   title: string;
   markdown: string;
   tags: Tag[];
-  //cost: string;
+  cost: string;
+  oneTimePayment: boolean;
+  paid: boolean;
 };
 
 export type Tag = {
@@ -30,14 +33,14 @@ export type RawExpenseData = {
   title: string;
   markdown: string;
   tagIds: string[];
-  //cost: string;
+  cost: string;
+  oneTimePayment: boolean;
+  paid: boolean;
 };
 
 function App() {
   const [expenses, setExpenses] = useLocalStorage<RawExpense[]>("EXPENSES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
-  //const [costs, setCosts] = useLocalStorage
-  //TODO: add handling for costs
 
   const expensesWithTags = useMemo(() => {
     return expenses.map((expense) => {
@@ -64,7 +67,7 @@ function App() {
   return (
     <Container className="my-4">
       <Routes>
-        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/" element={<ExpenseList />} />
         <Route
           path="/new"
           element={
