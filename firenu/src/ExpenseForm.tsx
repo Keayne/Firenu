@@ -19,7 +19,7 @@ export function ExpenseForm({
   const titleRef = useRef<HTMLInputElement>(null);
   const costRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
-  const oneTimePayment = useRef<HTMLFormElement>(null);
+  const oneTimePayment = useRef<HTMLInputElement>(null);
   const paid = useRef<HTMLInputElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const navigate = useNavigate();
@@ -32,8 +32,8 @@ export function ExpenseForm({
       cost: costRef.current!.value,
       markdown: markdownRef.current!.value,
       tags: selectedTags,
-      oneTimePayment: false, //TODO fix ref 3726
-      paid: false, //TODO fix ref
+      oneTimePayment: oneTimePayment.current?.checked || false, // 3726
+      paid: paid.current?.checked || false,
     });
 
     //navigate(".."); navigate back to previous page after submit, disabled for testing
@@ -83,8 +83,9 @@ export function ExpenseForm({
               type="switch"
               id="oneTimeSwitch"
               label="One time payment"
+              ref={oneTimePayment}
             />
-            <Form.Check type="switch" id="paidSwitch" label="Paid" />
+            <Form.Check type="switch" id="paidSwitch" label="Paid" ref={paid} />
           </Form.Group>
         </Row>
         <Form.Group controlId="markdown">
