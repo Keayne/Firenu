@@ -1,18 +1,26 @@
 import { Form, Stack, Row, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CreatableReactSelect from "react-select/creatable";
 import { FormEvent, useRef, useState } from "react";
 import { ExpenseData, Tag } from "./App";
+import { v4 as uuidV4 } from "uuid";
 
 type ExpenseFormProps = {
   onSubmit: (data: ExpenseData) => void;
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
 };
 
-export function ExpenseForm({ onSubmit }: ExpenseFormProps) {
+export function ExpenseForm({
+  onSubmit,
+  onAddTag,
+  availableTags,
+}: ExpenseFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
   const costRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const navigate = useNavigate();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -20,9 +28,11 @@ export function ExpenseForm({ onSubmit }: ExpenseFormProps) {
       //values can't be null as required from form
       title: titleRef.current!.value,
       markdown: markdownRef.current!.value,
-      tags: [],
-      cost: costRef.current!.value,
+      tags: selectedTags,
+      //cost: costRef.current!.value,
     });
+
+    navigate("..");
   }
   return (
     <Form onSubmit={handleSubmit}>
@@ -31,14 +41,22 @@ export function ExpenseForm({ onSubmit }: ExpenseFormProps) {
           <Col>
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
-              <Form.Control required />
+              <Form.Control ref={titleRef} required />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="tags">
               <Form.Label>Tags</Form.Label>
               <CreatableReactSelect
+                onCreateOption={(label) => {
+                  const newTag = { id: uuidV4(), label };
+                  onAddTag(newTag);
+                  setSelectedTags((prev) => [...prev, newTag]); //append new Tag
+                }}
                 value={selectedTags.map((tag) => {
+                  return { label: tag.label, value: tag.id };
+                })}
+                options={availableTags.map((tag) => {
                   return { label: tag.label, value: tag.id };
                 })}
                 onChange={(tags) => {
@@ -67,7 +85,7 @@ export function ExpenseForm({ onSubmit }: ExpenseFormProps) {
         </Row>
         <Form.Group controlId="markdown">
           <Form.Label>Body</Form.Label>
-          <Form.Control required as="textarea" rows={15} />
+          <Form.Control required as="textarea" rows={15} ref={markdownRef} />
         </Form.Group>
         <Stack direction="horizontal" gap={2} className="justify-content-end">
           <Button type="submit" variant="primary">
